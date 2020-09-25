@@ -13,11 +13,14 @@ RUN unzip us-postal.zip
 RUN rm readme.txt
 RUN mv US.txt us-postal.txt
 
-# # Gazeteer information
-# RUN wget -O us-gazetteer.zip http://download.geonames.org/export/dump/US.zip
-# RUN unzip us-gazetteer.zip
-# RUN rm readme.txt
-# RUN mv US.txt us-gazetteer.txt
+# Gazeteer information
+RUN wget -O us-gazetteer.zip http://download.geonames.org/export/dump/US.zip
+RUN unzip us-gazetteer.zip
+RUN rm readme.txt
+RUN mv US.txt us-gazetteer.txt
                
 COPY geonames-import.py .
-CMD ["python", "geonames-import.py"]
+RUN python geonames-import.py
+
+# Note: There seems to be an issue using CMD and the geonames-import script
+CMD ["echo", "done"]
