@@ -52,6 +52,4 @@ if __name__ == '__main__':
         'timezone',
         'modifiedDate'
     ])
-    print("be patient..this one takes a while")
     us_gazetteer_data_frame.to_sql('us_gazetteer',  engine)
-    print('import success')
