@@ -30,26 +30,26 @@ if __name__ == '__main__':
     us_postal_data_frame.to_sql('us_postal',  engine)
 
     # Geonames Gazeteer database
-    us_gazetteer_data_frame  = read_csv('us-gazetteer.txt', [
-        'geonameid',
-        'name',
-        'asciiname',
-        'alternateNames',
-        'convenienceAttribute',
-        'latitude',
-        'longitude',
-        'featureClass',
-        'featureCode',
-        'countryCode',
-        'countryCode2',
-        'admin1Code',
-        'admin2Code',
-        'admin3Code',
-        'admin4Code',
-        'population',
-        'elevation',
-        'dem',
-        'timezone',
-        'modifiedDate'
-    ])
-    us_gazetteer_data_frame.to_sql('us_gazetteer',  engine)
+    # us_gazetteer_data_frame  = read_csv('us-gazetteer.txt', [
+    #     'geonameid',
+    #     'name',
+    #     'asciiname',
+    #     'alternateNames',
+    #     'convenienceAttribute',
+    #     'latitude',
+    #     'longitude',
+    #     'featureClass',
+    #     'featureCode',
+    #     'countryCode',
+    #     'countryCode2',
+    #     'admin1Code',
+    #     'admin2Code',
+    #     'admin3Code',
+    #     'admin4Code',
+    #     'population',
+    #     'elevation',
+    #     'dem',
+    #     'timezone',
+    #     'modifiedDate'
+    # ])
+    # us_gazetteer_data_frame.to_sql('us_gazetteer',  engine)

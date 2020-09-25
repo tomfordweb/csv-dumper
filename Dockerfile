@@ -20,4 +20,5 @@ RUN mv US.txt us-postal.txt
 # RUN mv US.txt us-gazetteer.txt
                
 COPY geonames-import.py .
-CMD ["python", "geonames-import.py"]
+RUN python geonames-import.py
+CMD ["echo", "done"]
