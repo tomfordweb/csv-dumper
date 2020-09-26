@@ -1,7 +1,8 @@
 ###
 # Create databases off free geonames information
+# We need the full python library for pandas.
 ###
-FROM python:latest as geonames-builder
+FROM python:3.8
 
 RUN pip install pandas SQLAlchemy
 
