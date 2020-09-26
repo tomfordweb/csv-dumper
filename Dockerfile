@@ -4,24 +4,28 @@
 ###
 FROM python:3.8
 
-RUN pip install pandas SQLAlchemy
+ARG PREFIX
+
+RUN pip install pandas \
+    SQLAlchemy \
+    click
 
 WORKDIR /
 # Use wget to download files so docker can cache these.
 # zip code database
-RUN wget -O us-postal.zip http://download.geonames.org/export/zip/US.zip
-RUN unzip us-postal.zip
+RUN wget -O postal.zip http://download.geonames.org/export/zip/${PREFIX}.zip
+RUN unzip postal.zip
 RUN rm readme.txt
-RUN mv US.txt us-postal.txt
+RUN mv ${PREFIX}.txt postal.txt
 
 # Gazeteer information
-RUN wget -O us-gazetteer.zip http://download.geonames.org/export/dump/US.zip
-RUN unzip us-gazetteer.zip
+RUN wget -O gazetteer.zip http://download.geonames.org/export/dump/${PREFIX}.zip
+RUN unzip gazetteer.zip
 RUN rm readme.txt
-RUN mv US.txt us-gazetteer.txt
+RUN mv ${PREFIX}.txt gazetteer.txt
                
 COPY geonames-import.py .
-RUN python geonames-import.py
+RUN python geonames-import.py --prefix=${PREFIX}
 
 # Note: There seems to be an issue using CMD and the geonames-import script
 CMD ["echo", "done"]

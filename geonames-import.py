@@ -1,11 +1,14 @@
 from pandas import read_csv
 from sqlalchemy import create_engine
+import click
 
-engine = create_engine('sqlite:///postal.db', echo=True)
+engine = create_engine('sqlite:///geonames.sqlite', echo=True)
 
-if __name__ == '__main__':
-    # Geonames Zip database
-    us_postal_data_frame = read_csv('us-postal.txt',
+@click.command()
+@click.option('--prefix')
+def main(prefix):
+# Geonames Zip database
+    us_postal_data_frame = read_csv('postal.txt',
         sep="\t",
         names=[
             "country_code", 
@@ -23,10 +26,10 @@ if __name__ == '__main__':
         ],
         usecols=["postal_code","city","state","state_abbreviation","county","latitude","longitude"]
     )
-    us_postal_data_frame.to_sql('us_postal',  engine)
+    us_postal_data_frame.to_sql('%s_postal' % prefix.lower(),  engine)
 
     # Geonames Gazeteer database
-    us_gazetteer_data_frame  = read_csv('us-gazetteer.txt',
+    us_gazetteer_data_frame  = read_csv('gazetteer.txt',
         sep="\t",
         names=[
             'geonames_id',
@@ -51,4 +54,8 @@ if __name__ == '__main__':
         ],
         usecols=["geonames_id", "name", "alternate_names","latitude","longitude", "population","elevation","timezone"]
     )
-    us_gazetteer_data_frame.to_sql('us_gazetteer',  engine)
+    us_gazetteer_data_frame.to_sql('%s_gazetteer' % prefix.lower(),  engine)
+
+
+if __name__ == '__main__':
+    main()
