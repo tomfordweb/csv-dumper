@@ -1,7 +1,7 @@
 # Create databases off free geonames information
 # We need the full python library for pandas
 # TODO: optimize container to use alpine
-FROM python:3.8
+FROM python:3.8 as builder
 
 ARG PREFIX
 ARG SCHEMA=sqlite
@@ -34,3 +34,7 @@ RUN python import.py \
 # Note: There seems to be an issue using CMD and
 # the geonames-import script
 CMD ["echo", "done"]
+
+FROM scratch
+
+COPY --from=builder /app/geonames.sqlite geonames-${PREFIX}.sqlite
