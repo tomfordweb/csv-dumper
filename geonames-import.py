@@ -1,24 +1,23 @@
 from pandas import read_csv
 from sqlalchemy import create_engine
 import click
-from app.config import GeonamesConfig
-from app.importer.geonames import importGeonames
+from app.config import GeonamesPostalConfig, GeonamesGazetteerConfig
+from app.importer.geonames import importGeonamesPostal, importGeonamesGazetteer
 
-engine = create_engine('sqlite:///geonames.sqlite', echo=True)
+databaseEngine = create_engine('sqlite:///geonames.sqlite', echo=True)
 
 
 @click.command()
 @click.option('--prefix')
 @click.option('--schema')
 def importer(prefix, schema):
-    geonamesConfig = GeonamesConfig(prefix=prefix)
-    importGeonames(engine, geonamesConfig)
+    # Geonames Postal
+    postalConfig = GeonamesPostalConfig(prefix=prefix)
+    importGeonamesPostal(databaseEngine, postalConfig)
 
-# Geonames Zip database
-
-
-    # Geonames Gazeteer database
-
+    # Geonames Gazetteer
+    gazetteerConfig = GeonamesGazetteerConfig(prefix=prefix)
+    importGeonamesGazetteer(databaseEngine, gazetteerConfig)
 
 
 if __name__ == '__main__':

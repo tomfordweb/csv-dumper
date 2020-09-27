@@ -1,10 +1,34 @@
-class GeonamesConfig:
-    POSTAL_CSV_ABS_PATH = 'postal.txt'
-    GAZETTEER_CSV_ABS_PATH = 'gazetteer.txt'
-    POSTAL_CSV_DELIMITER = "\t"
-    GAZETTEER_CSV_DELIMITER = "\t"
+class ImportConfig:
+    """<Config(prefix="us")>"""
+    def __init__(self, **kwargs):
+        self.prefix = None
+        allowedKeys = set(['prefix'])
+        # Set provided values
+        self.__dict__.update((key,value) for key, value in kwargs.items() if key in allowedKeys)
 
-    POSTAL_CSV_COLUMN_NAMES = [
+
+class GeonamesConfig(ImportConfig):
+    ENTITY_NAME = None
+    CSV_DELIMITER = "\t"
+    CSV_COLUMNS_NAMES = None
+    CSV_USE_COLUMNS = None
+    
+    @property
+    def tableName(self):
+        return "%s_%s" % (
+            self.prefix,
+            self.ENTITY_NAME
+        )
+
+    @property
+    def csvFile(self):
+        return "%s.txt" % self.ENTITY_NAME
+    
+ 
+class GeonamesPostalConfig(GeonamesConfig):
+    ENTITY_NAME = 'postal'
+
+    CSV_COLUMN_NAMES = [
         "country_code", 
         "postal_code", 
         "city", 
@@ -19,7 +43,7 @@ class GeonamesConfig:
         "accuracy"
     ]
 
-    POSTAL_CSV_USE_COLUMNS = [
+    CSV_USE_COLUMNS = [
         "postal_code",
         "city",
         "state",
@@ -29,7 +53,11 @@ class GeonamesConfig:
         "longitude"
     ]
 
-    GAZETTEER_CSV_COLUMN_NAMES = [
+
+class GeonamesGazetteerConfig(GeonamesConfig):
+    ENTITY_NAME = 'gazetteer'
+
+    CSV_COLUMN_NAMES = [
         'geonames_id',
         'name',
         'ascii_name',
@@ -51,7 +79,7 @@ class GeonamesConfig:
         'modified_date'
     ]
 
-    GAZETTER_CSV_USE_COLUMNS = [
+    CSV_USE_COLUMNS = [
         "geonames_id", 
         "name", 
         "alternate_names",
@@ -61,13 +89,4 @@ class GeonamesConfig:
         "elevation",
         "timezone"
     ]
-
-    def __init__(self, **kwargs):
-        allowedKeys = set(['prefix'])
-
-        # Initialize attributes to false
-        self.__dict__.update((key, False) for key in allowedKeys)
-
-        # Set provided values
-        self.__dict__.update((key,value) for key, value in kwargs.items() if key in allowedKeys)
 

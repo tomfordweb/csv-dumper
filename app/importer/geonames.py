@@ -1,8 +1,8 @@
-from ..config import GeonamesConfig
+from ..config import GeonamesConfig, GeonamesGazetteerConfig, GeonamesPostalConfig
 from pandas import read_csv
 
 
-def importGeonamesPostal(databaseEngine, config: GeonamesConfig):
+def importGeonamesPostal(databaseEngine, config: GeonamesPostalConfig):
     postal_data_frame = read_csv(config.POSTAL_CSV_ABS_PATH,
         sep=config.POSTAL_CSV_DELIMITER,
         names=config.POSTAL_CSV_COLUMN_NAMES,
@@ -13,8 +13,9 @@ def importGeonamesPostal(databaseEngine, config: GeonamesConfig):
         '%s_postal' % config.prefix.lower(),
         databaseEngine
     )
+    
 
-def importGeonamesGazetteer(databaseEngine, config: GeonamesConfig):
+def importGeonamesGazetteer(databaseEngine, config: GeonamesGazetteerConfig):
     gazetteer_data_frame  = read_csv(config.GAZETTEER_CSV_ABS_PATH,
         sep=config.GAZETTEER_CSV_DELIMITER,
         names=config.GAZETTEER_CSV_COLUMN_NAMES,
@@ -26,7 +27,4 @@ def importGeonamesGazetteer(databaseEngine, config: GeonamesConfig):
         databaseEngine
     )
 
-def importGeonames(databaseEngine, config: GeonamesConfig):
-    importGeonamesPostal(databaseEngine, config)
-    importGeonamesGazetteer(databaseEngine, config)
     
