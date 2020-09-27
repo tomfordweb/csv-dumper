@@ -12,22 +12,22 @@ RUN pip install \
     click
 
 WORKDIR /app
-# Use wget to download files so docker can cache these.
-# zip code database
-RUN wget -O postal.zip http://download.geonames.org/export/zip/${PREFIX}.zip
-RUN unzip postal.zip
-RUN rm readme.txt
-RUN mv ${PREFIX}.txt postal.txt
 
-# Gazeteer information
-# Appears to be public landmarks, gov buildings, 
-# and other publicly available data
-RUN wget -O gazetteer.zip http://download.geonames.org/export/dump/${PREFIX}.zip
-RUN unzip gazetteer.zip
-RUN rm readme.txt
-RUN mv ${PREFIX}.txt gazetteer.txt
+# NOTE: You sould use wget to retreive the CSVS as docker can cache the download
+# Postral csv
+RUN wget -O postal.zip http://download.geonames.org/export/zip/${PREFIX}.zip && \
+    unzip postal.zip && \ 
+    rm readme.txt && \
+    mv ${PREFIX}.txt postal.txt
+
+# Gazetteer csv
+RUN wget -O gazetteer.zip http://download.geonames.org/export/dump/${PREFIX}.zip && \
+    unzip gazetteer.zip && \
+    rm readme.txt && \
+    mv ${PREFIX}.txt gazetteer.txt
                
 COPY . .
+
 RUN python geonames-import.py \ 
     --prefix=${PREFIX} \
     --schema=${SCHEMA}
