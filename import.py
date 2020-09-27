@@ -8,8 +8,7 @@ databaseEngine = create_engine('sqlite:///geonames.sqlite', echo=True)
 
 @click.command()
 @click.option('--prefix')
-@click.option('--schema')
-def importer(prefix, schema):
+def importer(prefix):
     # Geonames Postal
     postalConfig = GeonamesPostalConfig(prefix=prefix)
     importGeonamesFromConfig(databaseEngine, postalConfig)
