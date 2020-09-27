@@ -31,10 +31,8 @@ COPY . .
 RUN python import.py \ 
     --prefix=${PREFIX}
 
-# Note: There seems to be an issue using CMD and
-# the geonames-import script
-CMD ["echo", "done"]
 
 FROM scratch
 
+ARG PREFIX
 COPY --from=builder /app/geonames.sqlite geonames-${PREFIX}.sqlite
