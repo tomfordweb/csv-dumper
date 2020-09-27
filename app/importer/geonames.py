@@ -1,4 +1,4 @@
-from ..config import GeonamesConfig
+from ..config.geonames import GeonamesConfig
 from pandas import read_csv
 
 

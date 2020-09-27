@@ -1,11 +1,4 @@
-class ImportConfig:
-    """<Config(prefix="us")>"""
-    def __init__(self, **kwargs):
-        self.prefix = None
-        allowedKeys = set(['prefix'])
-        # Set provided values
-        self.__dict__.update((key,value) for key, value in kwargs.items() if key in allowedKeys)
-
+from .importConfig import ImportConfig
 
 class GeonamesConfig(ImportConfig):
     ENTITY_NAME = None
@@ -89,4 +82,3 @@ class GeonamesGazetteerConfig(GeonamesConfig):
         "elevation",
         "timezone"
     ]
-
