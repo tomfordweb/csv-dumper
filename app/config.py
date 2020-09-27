@@ -12,17 +12,17 @@ class GeonamesConfig(ImportConfig):
     CSV_DELIMITER = "\t"
     CSV_COLUMNS_NAMES = None
     CSV_USE_COLUMNS = None
-    
+
     @property
     def tableName(self):
         return "%s_%s" % (
-            self.prefix,
+            self.prefix.lower(),
             self.ENTITY_NAME
         )
 
     @property
     def csvFile(self):
-        return "%s.txt" % self.ENTITY_NAME
+        return "%s.txt" % self.ENTITY_NAME.lower()
     
  
 class GeonamesPostalConfig(GeonamesConfig):

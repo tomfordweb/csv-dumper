@@ -2,7 +2,7 @@ from pandas import read_csv
 from sqlalchemy import create_engine
 import click
 from app.config import GeonamesPostalConfig, GeonamesGazetteerConfig
-from app.importer.geonames import importGeonamesPostal, importGeonamesGazetteer
+from app.importer.geonames import importGeonamesFromConfig
 
 databaseEngine = create_engine('sqlite:///geonames.sqlite', echo=True)
 
@@ -13,11 +13,11 @@ databaseEngine = create_engine('sqlite:///geonames.sqlite', echo=True)
 def importer(prefix, schema):
     # Geonames Postal
     postalConfig = GeonamesPostalConfig(prefix=prefix)
-    importGeonamesPostal(databaseEngine, postalConfig)
+    importGeonamesFromConfig(databaseEngine, postalConfig)
 
     # Geonames Gazetteer
     gazetteerConfig = GeonamesGazetteerConfig(prefix=prefix)
-    importGeonamesGazetteer(databaseEngine, gazetteerConfig)
+    importGeonamesFromConfig(databaseEngine, gazetteerConfig)
 
 
 if __name__ == '__main__':

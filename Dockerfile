@@ -28,7 +28,7 @@ RUN wget -O gazetteer.zip http://download.geonames.org/export/dump/${PREFIX}.zip
                
 COPY . .
 
-RUN python geonames-import.py \ 
+RUN python import.py \ 
     --prefix=${PREFIX} \
     --schema=${SCHEMA}
 
