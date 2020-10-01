@@ -11,5 +11,6 @@ def importGeonamesFromConfig(databaseEngine, config: GeonamesConfig):
 
     postal_data_frame.to_sql(
         config.tableName,
-        databaseEngine
+        databaseEngine,
+        index=False
     )
