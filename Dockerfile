@@ -3,8 +3,6 @@
 # TODO: optimize container to use alpine
 FROM python:3.8 as builder
 
-ARG PREFIX
-ARG SCHEMA=sqlite
 
 RUN pip install \
     pandas \
@@ -12,27 +10,10 @@ RUN pip install \
     click
 
 WORKDIR /app
-
-# NOTE: You sould use wget to retreive the CSVS as docker can cache the download
-# Postral csv
-RUN wget -O postal.zip http://download.geonames.org/export/zip/${PREFIX}.zip && \
-    unzip postal.zip && \ 
-    rm readme.txt && \
-    mv ${PREFIX}.txt postal.txt
-
-# Gazetteer csv
-RUN wget -O gazetteer.zip http://download.geonames.org/export/dump/${PREFIX}.zip && \
-    unzip gazetteer.zip && \
-    rm readme.txt && \
-    mv ${PREFIX}.txt gazetteer.txt
                
 COPY . .
 
-RUN python import.py \ 
-    --prefix=${PREFIX}
+
+ENTRYPOINT ["python", "import.py"]
 
 
-FROM scratch
-
-ARG PREFIX
-COPY --from=builder /app/geonames.sqlite geonames-${PREFIX}.sqlite
