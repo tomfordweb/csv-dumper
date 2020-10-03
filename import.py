@@ -1,49 +1,42 @@
 from pandas import read_csv
 import click
-from app.config.geonames import GeonamesPostalConfig, GeonamesGazetteerConfig
-from app.importer.reader import createDataframeFromConfig
 from app.config.csv import CsvImportConfig
-from app.importer.sqlite import saveDataframeToSqlite
 from sqlalchemy import create_engine
-
+from app.factory import ColumnFactory
 
 databaseEngine = create_engine('sqlite://', echo=False)
 
-
-def configFactory(name:str):
-    if name == 'geonames-postal':
-        config = GeonamesPostalConfig()
-        config.entityName = 'postal'
-        config.prefix = 'postal'
-        return config
-
-    else:
-        raise NameError(f'invalid config "{name}"')
-
-
-
 @click.command()
-@click.option('--inputfile')
-@click.option('--config')
-@click.option('--outputstyle')
-def importer(inputfile, config, outputstyle):
-    # Geonames Postal
-    config = configFactory(config)
-    config.inputFile = inputfile
-    config.outputStyle = outputstyle
-    
-    df = createDataframeFromConfig(config)
+@click.option('--input', '-f' ,'_input', required=True, type=str)
+@click.option('--columns', '-c', required=True, type=str)
+@click.option('--table', '-t', required=True, type=str)
+@click.option('--delimiter', '-d', default="\t")
+def importer(_input, columns, table, delimiter):
 
-    saveDataframeToSqlite(df, databaseEngine, config)
+    columns = ColumnFactory(columns)
+    config = CsvImportConfig()
+    config.inputFile = _input
+    config.table = table
+    config.columns = columns.cols
+    config.dTypes = columns.dtypes
+    config.delimiter = delimiter
+
+    df =  read_csv(config.inputFile,
+        sep="\t",
+        names=config.columns,
+        dtype=config.dTypes
+    )
     
+    df.to_sql(
+        config.table,
+        databaseEngine,
+        index=False
+    )
 
     with databaseEngine.connect() as conn:
         for line in conn.connection.iterdump():
-            print(line)
-
-
-    for row in df.items():
-        print(row)
+            if line.startswith('INSERT'):
+                print(line)
 
 if __name__ == '__main__':
     importer()
