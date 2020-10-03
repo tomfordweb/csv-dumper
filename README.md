@@ -1,5 +1,7 @@
 Processes a CSV file and outputs SQL insert statments.
 
+First, place your CSV file in the folder.
+
 # Usage
 
 ```
