@@ -1,8 +1,10 @@
+from ..config.csv import CsvImportConfig
 
 
-def saveDataframeToSqlite(df, config:):
+def saveDataframeToSqlite(df, engine, config: CsvImportConfig):
+
     df.to_sql(
         config.tableName,
-        databaseEngine,
+        engine,
         index=False
     )

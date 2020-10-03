@@ -1,11 +1,13 @@
 from pandas import read_csv
-from sqlalchemy import create_engine
 import click
 from app.config.geonames import GeonamesPostalConfig, GeonamesGazetteerConfig
 from app.importer.reader import createDataframeFromConfig
 from app.config.csv import CsvImportConfig
+from app.importer.sqlite import saveDataframeToSqlite
+from sqlalchemy import create_engine
 
-databaseEngine = create_engine('sqlite:///geonames.sqlite', echo=True)
+
+databaseEngine = create_engine('sqlite://', echo=False)
 
 
 def configFactory(name:str):
@@ -32,12 +34,16 @@ def importer(inputfile, config, outputstyle):
     
     df = createDataframeFromConfig(config)
 
-    print(df)
-    return
-    # Geonames Gazetteer
-    # gazetteerConfig = GeonamesGazetteerConfig(prefix=prefix)
-    # importGeonamesFromConfig(databaseEngine, gazetteerConfig)
+    saveDataframeToSqlite(df, databaseEngine, config)
+    
 
+    with databaseEngine.connect() as conn:
+        for line in conn.connection.iterdump():
+            print(line)
+
+
+    for row in df.items():
+        print(row)
 
 if __name__ == '__main__':
     importer()
