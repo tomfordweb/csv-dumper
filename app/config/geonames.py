@@ -1,26 +1,6 @@
-from .importConfig import ImportConfig
-
-class GeonamesConfig(ImportConfig):
-    ENTITY_NAME = None
-    CSV_DELIMITER = "\t"
-    CSV_COLUMNS_NAMES = None
-    CSV_USE_COLUMNS = None
-
-    @property
-    def tableName(self):
-        return "%s_%s" % (
-            self.prefix.lower(),
-            self.ENTITY_NAME
-        )
-
-    @property
-    def csvFile(self):
-        return "%s.txt" % self.ENTITY_NAME.lower()
-    
+from .csv import CsvImportConfig
  
-class GeonamesPostalConfig(GeonamesConfig):
-    ENTITY_NAME = 'postal'
-
+class GeonamesPostalConfig(CsvImportConfig):
     CSV_COLUMN_NAMES = [
         "country_code", 
         "postal_code", 
@@ -37,19 +17,22 @@ class GeonamesPostalConfig(GeonamesConfig):
     ]
 
     CSV_USE_COLUMNS = [
-        "postal_code",
-        "city",
-        "state",
+         "country_code", 
+        "postal_code", 
+        "city", 
+        "state", 
         "state_abbreviation",
         "county",
+        "county_code",
+        "admin_name_3",
+        "admin_code_3",
         "latitude",
-        "longitude"
+        "longitude",
+        "accuracy"
     ]
 
 
-class GeonamesGazetteerConfig(GeonamesConfig):
-    ENTITY_NAME = 'gazetteer'
-
+class GeonamesGazetteerConfig(CsvImportConfig):
     CSV_COLUMN_NAMES = [
         'geonames_id',
         'name',
@@ -73,12 +56,23 @@ class GeonamesGazetteerConfig(GeonamesConfig):
     ]
 
     CSV_USE_COLUMNS = [
-        "geonames_id", 
-        "name", 
-        "alternate_names",
-        "latitude",
-        "longitude",
-        "population",
-        "elevation",
-        "timezone"
+        'geonames_id',
+        'name',
+        'ascii_name',
+        'alternate_names',
+        'latitude',
+        'longitude',
+        'feature_class',
+        'feature_code',
+        'country_code',
+        'country_code2',
+        'admin1_code',
+        'admin2_code',
+        'admin3_code',
+        'admin4_code',
+        'population',
+        'elevation',
+        'dem',
+        'timezone',
+        'modified_date'
     ]
