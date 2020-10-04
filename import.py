@@ -36,6 +36,13 @@ def importer(_input, columns, table, delimiter):
     with databaseEngine.connect() as conn:
         for line in conn.connection.iterdump():
             if line.startswith('INSERT'):
+                # "Convert" this to useful insert statements by finding
+                # the index of the table name, inserting the columns
+                # and returning the formatted string.
+                tableIndex = line.index("VALUES")
+                cols = str(tuple(df.columns.values.tolist()))
+                colsNoQuotes = cols.replace("'", "")
+                line = f'{line[:tableIndex]} {colsNoQuotes} {line[tableIndex:]}'
                 print(line)
 
 if __name__ == '__main__':
