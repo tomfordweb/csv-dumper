@@ -8,7 +8,7 @@ echo '1, john@example.com' >> input.csv
 ```
 
 ```
-docker run registry.gitlab.com/tomfordweb/csv-dumper/master:latest \
+docker run -v $(pwd):/app/input registry.gitlab.com/tomfordweb/csv-dumper:latest \
     -f=input.csv  \
     -c=key,email:string  \
     -t=users 
