@@ -3,13 +3,15 @@ Processes a CSV file and outputs SQL insert statments.
 First, place your CSV file in the folder.
 
 # Usage
+```
+echo '1, john@example.com' >> input.csv
+```
 
 ```
-$ docker build -t database-importer tomfordweb/csv-dumper:latest
-$ docker run database-importer \
-    -f=data.csv  \
-    -c=foo:str,bar:int,baz,fizz,buzz  \
-    -t=table > /tmp/database-dump.sql
+docker run registry.gitlab.com/tomfordweb/csv-dumper/master:latest \
+    -f=input.csv  \
+    -c=key,email:string  \
+    -t=users 
 
 ```
 
