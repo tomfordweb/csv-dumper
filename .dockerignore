@@ -1,2 +1,3 @@
 venv
+.gitlab-ci.yml
 __pycache__
