@@ -4,16 +4,20 @@ First, place your CSV file in the folder.
 
 # Usage
 ```
-echo '1, john@example.com' >> input.csv
+mkdir input
+echo '1, john@example.com' >> input/input.csv
 ```
 
 ```
-docker run -v $(pwd):/app/input registry.gitlab.com/tomfordweb/csv-dumper:latest \
-    -f=input.csv  \
+cd input
+docker run -v $(pwd):/input registry.gitlab.com/tomfordweb/csv-dumper:latest \
+    -f=/input/input.csv  \
     -c=key,email:string  \
     -t=users 
 
 ```
+
+This will create a bind mount in the current directory and move the files to the /input directory on the container. Any directory is okay as long as it is not where the app is installed (do not use the `/app` folder!).
 
 # Arguments
 
